@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Drakpoker</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+  <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+
+<script>
+$(document).bind("pageinit", function(){
+     // Patch to prevent overwriting <title></title>
+    $(":jqmData(role='page')").attr("data-title", document.title);
+});
+</script>
+
+<div data-role="page" id="login">
+
+  <div data-role="header">
+    <h1>Logga in för ett parti Drakpoker!</h1>
+  </div>
+
+  <div data-role="main" class="ui-content">
+    <div data-role="main" class="ui-content">
+      <form method="post" action="">
+        <label for="login_name" class="ui-hidden-accessible">Namn</label>
+        <input type="text" name="fname" id="login_name" placeholder="Namn som visas vid röstsammanställningen">
+
+        <label for="login_name" class="ui-hidden-accessible">Kod</label>
+        <input type="text" name="fname" id="login_code" placeholder="Din Drakpokerkod">
+
+        <div class="ui-grid-a">
+          <div class="ui-block-a" style="padding-right: 5px;"><button class="ui-btn ui-btn-corner-all ui-shadow" type="submit" name="vote">Rösta</button></div>
+          <div class="ui-block-b" style="padding-left: 5px;"><button class="ui-btn ui-btn-corner-all ui-shadow" type="submit" name="compile">Sammanställ</button></div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
