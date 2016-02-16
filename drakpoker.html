@@ -17,27 +17,45 @@ $(document).bind("pageinit", function(){
 });
 </script>
 
-<div data-role="page" id="login">
+<div data-role="page" id="login_page">
 
   <div data-role="header">
     <h1>Logga in för ett parti Drakpoker!</h1>
   </div>
 
-  <div data-role="main" class="ui-content">
-    <div data-role="main" class="ui-content">
-      <form method="post" action="">
-        <label for="login_name" class="ui-hidden-accessible">Namn</label>
-        <input type="text" name="fname" id="login_name" placeholder="Namn som visas vid röstsammanställningen">
+  <div data-role="content">
+    <form method="post" action="">
+      <label for="login_name" class="ui-hidden-accessible">Namn</label>
+      <input type="text" name="fname" id="login_name" placeholder="Namn som visas vid röstsammanställningen">
 
-        <label for="login_name" class="ui-hidden-accessible">Kod</label>
-        <input type="text" name="fname" id="login_code" placeholder="Din Drakpokerkod">
+      <label for="login_name" class="ui-hidden-accessible">Kod</label>
+      <input type="text" name="fname" id="login_code" placeholder="Din Drakpokerkod">
 
-        <div class="ui-grid-a">
-          <div class="ui-block-a" style="padding-right: 5px;"><button class="ui-btn ui-btn-corner-all ui-shadow" type="submit" name="vote">Rösta</button></div>
-          <div class="ui-block-b" style="padding-left: 5px;"><button class="ui-btn ui-btn-corner-all ui-shadow" type="submit" name="compile">Sammanställ</button></div>
-        </div>
-      </form>
-    </div>
+      <div class="ui-grid-a">
+        <!-- Use these when we have something to submit to
+        <div class="ui-block-a" style="padding-right: 5px;"><button class="ui-btn ui-btn-corner-all ui-shadow" type="submit" name="vote">Rösta</button></div>
+        <div class="ui-block-b" style="padding-left: 5px;"><button class="ui-btn ui-btn-corner-all ui-shadow" type="submit" name="compile">Sammanställ</button></div>
+        -->
+        <div class="ui-block-a" style="padding-right: 5px;"><a href="#vote_page" class="ui-btn ui-btn-corner-all ui-shadow" name="vote">Rösta</a></div>
+        <div class="ui-block-b" style="padding-left: 5px;"><a href="#compile_page" class="ui-btn ui-btn-corner-all ui-shadow" name="compile">Sammanställ</a></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div data-role="page" id="vote_page">
+  <div data-role="header">
+    <h1>Rösta</h1>
+  </div>
+  <div data-role="content">
+  </div>
+</div>
+
+<div data-role="page" id="compile_page">
+  <div data-role="header">
+    <h1>Sammanställning</h1>
+  </div>
+  <div data-role="content">
   </div>
 </div>
 
