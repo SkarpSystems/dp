@@ -17,45 +17,67 @@ $(document).bind("pageinit", function(){
 });
 </script>
 
-<div data-role="page" id="login_page">
+<div data-role="page" id="login_page" data-theme="b">
 
   <div data-role="header">
-    <h1>Logga in för ett parti Drakpoker!</h1>
+    <h1>Log in for a game of Drakpoker!</h1>
   </div>
 
   <div data-role="content">
     <form method="post" action="">
-      <label for="login_name" class="ui-hidden-accessible">Namn</label>
-      <input type="text" name="fname" id="login_name" placeholder="Namn som visas vid röstsammanställningen">
+      <label for="login_name" class="ui-hidden-accessible">Name</label>
+      <input type="text" name="fname" id="login_name" placeholder="Name shown when compiling estimations">
 
-      <label for="login_name" class="ui-hidden-accessible">Kod</label>
-      <input type="text" name="fname" id="login_code" placeholder="Din Drakpokerkod">
+      <label for="login_name" class="ui-hidden-accessible">Code</label>
+      <input type="text" name="fname" id="login_code" placeholder="Your Drakpoker code">
 
-      <div class="ui-grid-a">
-        <!-- Use these when we have something to submit to
-        <div class="ui-block-a" style="padding-right: 5px;"><button class="ui-btn ui-btn-corner-all ui-shadow" type="submit" name="vote">Rösta</button></div>
-        <div class="ui-block-b" style="padding-left: 5px;"><button class="ui-btn ui-btn-corner-all ui-shadow" type="submit" name="compile">Sammanställ</button></div>
-        -->
-        <div class="ui-block-a" style="padding-right: 5px;"><a href="#vote_page" class="ui-btn ui-btn-corner-all ui-shadow" name="vote">Rösta</a></div>
-        <div class="ui-block-b" style="padding-left: 5px;"><a href="#compile_page" class="ui-btn ui-btn-corner-all ui-shadow" name="compile">Sammanställ</a></div>
-      </div>
+      <!-- Change to
+             <button class="ui-btn ui-btn-inline ui-btn-corner-all ui-shadow" type="submit" name="estimate">Estimate</button>
+           when we have something to submit to.
+      -->
+      <a href="#estimate_page"           class="ui-btn ui-btn-inline ui-btn-corner-all ui-shadow" name="estimate">Estimate</a>
+      <a href="#compiled_estimates_page" class="ui-btn ui-btn-inline ui-btn-corner-all ui-shadow" name="compile" >Compile estimations</a>
     </form>
   </div>
 </div>
 
-<div data-role="page" id="vote_page">
+
+<script>
+  $(document).ready(function() {
+    var allowed_estimates = ["?", "0", "½", "1", "2", "3", "5", "8", "13", "20", "40", "100", "coffee"];
+    var elements = []
+    for (var i = 0; i < allowed_estimates.length; i++) {
+      var estimate = allowed_estimates[i]
+      elements.push(`<input type="radio" name="estimate" id="estimate-${i}" value="estimate-${i}"/>`)
+      elements.push(`<label for="estimate-${i}">${estimate}</label>`)
+    }
+    $(".estimate-buttons").html(elements.join(''))
+    $("#estimate-0").attr("checked", true)
+  });
+</script>
+
+<div data-role="page" id="estimate_page" data-theme="b">
   <div data-role="header">
-    <h1>Rösta</h1>
+    <h1>Estimate</h1>
   </div>
   <div data-role="content">
+    <form method="post" action="demoform.asp">
+      <fieldset data-role="controlgroup" data-type="horizontal">
+        <legend>Select estimate:</legend>
+        <div class="estimate-buttons"></div>
+      </fieldset>
+      <input type="submit" data-inline="true" value="Confirm">
+    </form>
   </div>
 </div>
 
-<div data-role="page" id="compile_page">
+
+<div data-role="page" id="compiled_estimates_page" data-theme="b">
   <div data-role="header">
-    <h1>Sammanställning</h1>
+    <h1>Compiled estimates</h1>
   </div>
   <div data-role="content">
+    <p>TO BE ADDED
   </div>
 </div>
 
