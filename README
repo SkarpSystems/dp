@@ -1,0 +1,5 @@
+Install prereqs: npm update
+
+Start local web browser: nodejs index.js
+
+Connect browser to http://localhost:36080
