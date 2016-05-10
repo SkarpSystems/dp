@@ -48,9 +48,12 @@
             });
 
             $('#confirm_button').click(function () {
+                var selected_value = $('.estimate-buttons input[type="radio"]:checked:first').val();
+                var selected_idx = parseInt(selected_value.replace('estimate-', ''));
+                var estimate = allowed_estimates[selected_idx];
                 socket.emit('estimate', {
                     user: $('#login_name').val(),
-                    value: 10
+                    value: estimate
                 });
             });
         });
