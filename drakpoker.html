@@ -1,85 +1,113 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Drakpoker</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-  <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-  <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <title>Drakpoker</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 </head>
+
 <body>
 
-<script>
-$(document).bind("pageinit", function(){
-     // Patch to prevent overwriting <title></title>
-    $(":jqmData(role='page')").attr("data-title", document.title);
-});
-</script>
+    <script>
+        var socket = io();
 
-<div data-role="page" id="login_page" data-theme="b">
+        $(document).bind("pageinit", function () {
+            // Patch to prevent overwriting <title></title>
+            $(":jqmData(role='page')").attr("data-title", document.title);
+        });
 
-  <div data-role="header">
-    <h1>Log in for a game of Drakpoker!</h1>
-  </div>
+        $(document).ready(function () {
+            var allowed_estimates = ["?", "0", "½", "1", "2", "3", "5", "8", "13", "20", "40", "100", "coffee"];
+            var elements = []
+            for (var i = 0; i < allowed_estimates.length; i++) {
+                var estimate = allowed_estimates[i]
+                elements.push(`<input type="radio" name="estimate" id="estimate-${i}" value="estimate-${i}"/>`)
+                elements.push(`<label for="estimate-${i}">${estimate}</label>`)
+            }
+            $(".estimate-buttons").html(elements.join(''))
+            $("#estimate-0").attr("checked", true)
 
-  <div data-role="content">
-    <form method="post" action="">
-      <label for="login_name" class="ui-hidden-accessible">Name</label>
-      <input type="text" name="fname" id="login_name" placeholder="Name shown when compiling estimations">
+            $('#login_button').click(function () {
+                socket.emit('user_login', {
+                    user: $('#login_name').val(),
+                    code: $('#login_code').val()
+                });
+                $(":mobile-pagecontainer").pagecontainer("change", "#estimate_page");
+            });
+            $('#compile_button').click(function () {
+                socket.emit('compiler_login', {
+                    user: $('#login_name').val(),
+                    code: $('#login_code').val()
+                });
+                $(":mobile-pagecontainer").pagecontainer("change", "#compiled_estimates_page");
+            });
 
-      <label for="login_name" class="ui-hidden-accessible">Code</label>
-      <input type="text" name="fname" id="login_code" placeholder="Your Drakpoker code">
+            $('#confirm_button').click(function () {
+                socket.emit('estimate', {
+                    user: $('#login_name').val(),
+                    value: 10
+                });
+            });
+        });
+        socket.on('estimate', function (msg) {
+            $('#messages').append($('<li>').text("" + msg.user + " says " + msg.value));
+        });
+        socket.on('user_joined', function (msg) {
+            $('#messages').append($('<li>').text("" + msg.user + " joined"));
+        });
 
-      <!-- Change to
-             <button class="ui-btn ui-btn-inline ui-btn-corner-all ui-shadow" type="submit" name="estimate">Estimate</button>
-           when we have something to submit to.
-      -->
-      <a href="#estimate_page"           class="ui-btn ui-btn-inline ui-btn-corner-all ui-shadow" name="estimate">Estimate</a>
-      <a href="#compiled_estimates_page" class="ui-btn ui-btn-inline ui-btn-corner-all ui-shadow" name="compile" >Compile estimations</a>
-    </form>
-  </div>
-</div>
+        socket.on('user_left', function (msg) {
+            $('#messages').append($('<li>').text("" + msg.user + " left"));
+        });
+    </script>
 
+    <div data-role="page" id="login_page" data-theme="b">
 
-<script>
-  $(document).ready(function() {
-    var allowed_estimates = ["?", "0", "½", "1", "2", "3", "5", "8", "13", "20", "40", "100", "coffee"];
-    var elements = []
-    for (var i = 0; i < allowed_estimates.length; i++) {
-      var estimate = allowed_estimates[i]
-      elements.push(`<input type="radio" name="estimate" id="estimate-${i}" value="estimate-${i}"/>`)
-      elements.push(`<label for="estimate-${i}">${estimate}</label>`)
-    }
-    $(".estimate-buttons").html(elements.join(''))
-    $("#estimate-0").attr("checked", true)
-  });
-</script>
+        <div data-role="header">
+            <h1>Log in for a game of Drakpoker!</h1>
+        </div>
 
-<div data-role="page" id="estimate_page" data-theme="b">
-  <div data-role="header">
-    <h1>Estimate</h1>
-  </div>
-  <div data-role="content">
-    <form method="post" action="demoform.asp">
-      <fieldset data-role="controlgroup" data-type="horizontal">
-        <legend>Select estimate:</legend>
-        <div class="estimate-buttons"></div>
-      </fieldset>
-      <input type="submit" data-inline="true" value="Confirm">
-    </form>
-  </div>
-</div>
+        <div data-role="content">
+            <label for="login_name" class="ui-hidden-accessible">Name</label>
+            <input type="text" name="fname" id="login_name" placeholder="Name shown when compiling estimations">
+
+            <label for="login_name" class="ui-hidden-accessible">Code</label>
+            <input type="text" name="fname" id="login_code" placeholder="Your Drakpoker code">
+            <button id="login_button" class="ui-btn ui-btn-inline ui-btn-corner-all ui-shadow">Estimate</button>
+            <button id="compile_button" class="ui-btn ui-btn-inline ui-btn-corner-all ui-shadow">Compile estimations</button>
+        </div>
+    </div>
 
 
-<div data-role="page" id="compiled_estimates_page" data-theme="b">
-  <div data-role="header">
-    <h1>Compiled estimates</h1>
-  </div>
-  <div data-role="content">
-    <p>TO BE ADDED
-  </div>
-</div>
+
+    <div data-role="page" id="estimate_page" data-theme="b">
+        <div data-role="header">
+            <h1>Estimate</h1>
+        </div>
+        <div data-role="content">
+            <fieldset data-role="controlgroup" data-type="horizontal">
+                <legend>Select estimate:</legend>
+                <div class="estimate-buttons"></div>
+            </fieldset>
+            <button id="confirm_button">Confirm</button>
+        </div>
+    </div>
+
+
+    <div data-role="page" id="compiled_estimates_page" data-theme="b">
+        <div data-role="header">
+            <h1>Compiled estimates</h1>
+        </div>
+        <div data-role="content">
+            <ul id="messages"></ul>
+        </div>
+    </div>
 
 </body>
+
 </html>
