@@ -1,7 +1,9 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var compiler_socket = null;
+var game = require('./game.js');
+
+var g = new game.Game("foo");
 
 app.get('/', function (req, res) {
     "use strict";
@@ -19,41 +21,31 @@ io.on('connection', function (socket) {
     socket.user_name = "unknown";
     socket.on('disconnect', function () {
         console.log('user disconnected');
-        if (compiler_socket === socket) {
-            compiler_socket = null;
+        if (g.leader_socket === socket) {
+            g.leader_socket = null;
         }
-        if (compiler_socket !== null) {
-            compiler_socket.emit('user_left', {
+        
+        if (g.leader_socket !== null) {
+            g.leader_socket.emit('user_left', {
                 user: socket.user_name
             })
         }
     });
+    
     socket.on('LOGIN_E', function (msg) {
-        console.log('user login: ' + JSON.stringify(msg));
-        if (msg.user.length < 5) {
-            console.log('user name to short');
-            socket.emit('LOGIN_NACK', {'reason':"UID to short"})
-        }
-        else {
-            socket.user_name = msg.user;
-            socket.emit('LOGIN_ACK', {'role':"estimator"})
-            if (compiler_socket !== null) {
-                compiler_socket.emit('user_joined', {
-                    user: msg.user
-                })
-            }
-        }
+        console.log('LOGIN_E: ' + JSON.stringify(msg));
+        g.addEstimator(msg.user, socket);
     });
+    
     socket.on('estimate', function (msg) {
         console.log('estimate: ' + JSON.stringify(msg));
-        if (compiler_socket !== null) {
-            compiler_socket.emit('estimate', msg);
+        if (g.leader_socket !== null) {
+            g.leader_socket.emit('estimate', msg);
         }
     });
     socket.on('LOGIN_EL', function (msg) {
-        console.log('leader login: ' + JSON.stringify(msg));
-        socket.emit('LOGIN_ACK', {role:"leader"})
-        compiler_socket = socket;
+        console.log('LOGIN_EL: ' + JSON.stringify(msg));
+        g.addLeader(msg.user, socket);
     });
 });
 
