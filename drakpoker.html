@@ -33,18 +33,16 @@
             $("#estimate-0").attr("checked", true)
 
             $('#login_button').click(function () {
-                socket.emit('user_login', {
+                socket.emit('LOGIN_E', {
                     user: $('#login_name').val(),
                     code: $('#login_code').val()
                 });
-                $(":mobile-pagecontainer").pagecontainer("change", "#estimate_page");
             });
             $('#compile_button').click(function () {
-                socket.emit('compiler_login', {
+                socket.emit('LOGIN_EL', {
                     user: $('#login_name').val(),
                     code: $('#login_code').val()
                 });
-                $(":mobile-pagecontainer").pagecontainer("change", "#compiled_estimates_page");
             });
 
             $('#confirm_button').click(function () {
@@ -56,6 +54,17 @@
                     value: estimate
                 });
             });
+        });
+        socket.on('LOGIN_NACK', function (msg) {
+            alert(msg.reason);
+        });
+        socket.on('LOGIN_ACK', function (msg) {
+            if (msg.role === 'estimator') {
+                $(":mobile-pagecontainer").pagecontainer("change", "#estimate_page");
+            }
+            else {
+                $(":mobile-pagecontainer").pagecontainer("change", "#compiled_estimates_page");
+            }
         });
         socket.on('estimate', function (msg) {
             $('#messages').append($('<li>').text("" + msg.user + " says " + msg.value));

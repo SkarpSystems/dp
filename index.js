@@ -28,13 +28,20 @@ io.on('connection', function (socket) {
             })
         }
     });
-    socket.on('user_login', function (msg) {
+    socket.on('LOGIN_E', function (msg) {
         console.log('user login: ' + JSON.stringify(msg));
-        socket.user_name = msg.user;
-        if (compiler_socket !== null) {
-            compiler_socket.emit('user_joined', {
-                user: msg.user
-            })
+        if (msg.user.length < 5) {
+            console.log('user name to short');
+            socket.emit('LOGIN_NACK', {'reason':"UID to short"})
+        }
+        else {
+            socket.user_name = msg.user;
+            socket.emit('LOGIN_ACK', {'role':"estimator"})
+            if (compiler_socket !== null) {
+                compiler_socket.emit('user_joined', {
+                    user: msg.user
+                })
+            }
         }
     });
     socket.on('estimate', function (msg) {
@@ -43,8 +50,9 @@ io.on('connection', function (socket) {
             compiler_socket.emit('estimate', msg);
         }
     });
-    socket.on('compiler_login', function (msg) {
-        console.log('compiler login: ' + JSON.stringify(msg));
+    socket.on('LOGIN_EL', function (msg) {
+        console.log('leader login: ' + JSON.stringify(msg));
+        socket.emit('LOGIN_ACK', {role:"leader"})
         compiler_socket = socket;
     });
 });
