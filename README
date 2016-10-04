@@ -1,4 +1,11 @@
-Install prereqs: npm update
+Install jasmine globally
+> sudo npm install -g jasmine
+
+Install required dependencies: 
+> npm update
+
+Run tests:
+> jasmine
 
 Start local web browser: nodejs index.js
 
