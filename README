@@ -1,7 +1,7 @@
 Install jasmine globally
 > sudo npm install -g jasmine
 
-Install required dependencies: 
+Install required dependencies:
 > npm update
 
 Run tests:

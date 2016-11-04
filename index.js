@@ -24,19 +24,19 @@ io.on('connection', function (socket) {
         if (g.leader_socket === socket) {
             g.leader_socket = null;
         }
-        
+
         if (g.leader_socket !== null) {
             g.leader_socket.emit('user_left', {
                 user: socket.user_name
             })
         }
     });
-    
+
     socket.on('LOGIN_E', function (msg) {
         console.log('LOGIN_E: ' + JSON.stringify(msg));
         g.addEstimator(msg.user, socket);
     });
-    
+
     socket.on('estimate', function (msg) {
         console.log('estimate: ' + JSON.stringify(msg));
         if (g.leader_socket !== null) {
