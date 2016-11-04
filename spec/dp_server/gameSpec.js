@@ -1,6 +1,7 @@
 var gameMod = require('../../game.js');
 
 describe("Inital:", function () {
+    'use strict';
     var game;
 
     beforeEach(function () {
@@ -10,4 +11,4 @@ describe("Inital:", function () {
     it("instance is created", function () {
         expect(game.name).toEqual("TestGame");
     });
-})
+});

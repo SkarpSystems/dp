@@ -28,7 +28,7 @@ io.on('connection', function (socket) {
         if (g.leader_socket !== null) {
             g.leader_socket.emit('user_left', {
                 user: socket.user_name
-            })
+            });
         }
     });
 
