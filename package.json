@@ -1,10 +1,15 @@
 {
-  "name": "socket-chat-example",
+  "name": "Drakpoker",
   "version": "0.0.1",
-  "description": "my first socket.io app",
+  "description": "For estimating user stories.",
   "dependencies": {
     "express": "^4.10.2",
-    "socket.io": "^1.4.5",
-    "jasmine": "^2.5"
+    "socket.io": "^1.4.5"
+  },
+  "scripts": {
+    "test": "node_modules/.bin/jasmine"
+  },
+  "devDependencies": {
+    "jasmine": "^2.5.2"
   }
 }

@@ -4,8 +4,11 @@ Install jasmine globally
 Install required dependencies:
 > npm update
 
+Install extra dependencies for development:
+> npm --dev update
+
 Run tests:
-> jasmine
+> npm test
 
 Start local web browser: nodejs index.js
 
