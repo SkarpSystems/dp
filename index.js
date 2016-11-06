@@ -34,7 +34,7 @@ io.on('connection', function (socket) {
 
     socket.on('LOGIN_E', function (msg) {
         console.log('LOGIN_E: ' + JSON.stringify(msg));
-        g.addEstimator(msg.user, socket);
+        g.addEstimator(msg.user, msg.code, socket);
     });
 
     socket.on('estimate', function (msg) {
@@ -45,7 +45,7 @@ io.on('connection', function (socket) {
     });
     socket.on('LOGIN_EL', function (msg) {
         console.log('LOGIN_EL: ' + JSON.stringify(msg));
-        g.addLeader(msg.user, socket);
+        g.addLeader(msg.user, msg.code, socket);
     });
 });
 
